@@ -1,4 +1,4 @@
-from invite.cli import app
+from openrsvp_cli.main import app
 
 
 if __name__ == "__main__":
