@@ -2,6 +2,7 @@
 
 __all__ = [
     "config",
+    "config_cli",
     "client",
     "events",
     "rsvps",

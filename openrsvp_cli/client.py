@@ -67,7 +67,7 @@ class APIClient:
         if response.status_code in (401, 403):
             raise AuthError(
                 response.status_code,
-                "Authentication failed. Provide a valid token via --token, OPENRSVP_TOKEN, or ~/.openrsvp/config.toml.",
+                "Authentication failed. Provide a valid token via --token, OPENRSVP_TOKEN, or ~/.config/openrsvp/config.toml.",
             )
 
         try:

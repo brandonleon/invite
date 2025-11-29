@@ -8,14 +8,15 @@ Async Typer CLI for interacting with the OpenRSVP FastAPI backend. Everything ru
 - Install tool from git: `uv tool install git+https://your.git.repo/url#egg=invite`
 
 ## Configuration
-Values resolve in order CLI flag > env var > `~/.openrsvp/config.toml`.
+Values resolve in order CLI flag > env var > `~/.config/openrsvp/config.toml`.
 - Env vars: `OPENRSVP_BASE_URL`, `OPENRSVP_TOKEN`, `OPENRSVP_DEFAULT_CHANNEL`
-- Config file example:
+- Config file example (stored in `~/.config/openrsvp/config.toml`):
   ```toml
   base_url = "https://openrsvp.example.com"
   token = "YOUR_TOKEN"
   default_channel = "general"
   ```
+- Update the stored base URL from the CLI: `invite config set-base-url https://openrsvp.example.com` (or `--base-url/ -b ...`; defaults to `http://localhost:8000`).
 
 Global flags: `--base-url`, `--token`, `--default-channel`, `--json`, `--quiet`.
 

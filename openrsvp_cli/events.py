@@ -122,19 +122,14 @@ async def list_events(
     settings = _get_settings(ctx)
     target_channel = channel or settings.default_channel
 
-    if not target_channel and not settings.token:
-        console.print(
-            "[yellow]This server does not expose a public events listing. "
-            "Provide --channel to fetch a channel's events or --token to use the admin listing.[/yellow]"
-        )
-        raise typer.Exit(code=1)
-
     try:
         async with APIClient(settings) as client:
             if target_channel:
                 data = await client.get(f"/api/v1/channels/{target_channel}")
-            else:
+            elif settings.token:
                 data = await client.get(f"/admin/{settings.token}/events")
+            else:
+                data = await client.get("/api/v1/events")
     except Exception as exc:  # noqa: BLE001
         _handle_error(exc, settings)
         return

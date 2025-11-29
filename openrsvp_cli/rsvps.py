@@ -69,7 +69,9 @@ async def create_rsvp(
     event_id: str = typer.Argument(..., help="Event ID for the RSVP."),
     name: str = typer.Option(..., "--name", help="Name of the attendee."),
     email: str = typer.Option(..., "--email", help="Email of the attendee."),
-    guests: int = typer.Option(1, "--guests", help="Number of guests including the requester."),
+    guests: int = typer.Option(
+        0, "--guests", help="Number of guests including the requester (0 means just you)."
+    ),
     note: Optional[str] = typer.Option(None, "--note", help="Optional note for the host."),
 ) -> None:
     """Create an RSVP for an event."""

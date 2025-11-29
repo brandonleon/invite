@@ -10,7 +10,7 @@ try:  # Python 3.10 compatibility
 except ModuleNotFoundError:  # pragma: no cover - fallback for <3.11
     import tomli as tomllib
 
-CONFIG_PATH = Path.home() / ".openrsvp" / "config.toml"
+CONFIG_PATH = Path.home() / ".config" / "openrsvp" / "config.toml"
 
 
 def _read_config_file(path: Path = CONFIG_PATH) -> Dict[str, Optional[str]]:
@@ -36,6 +36,24 @@ def _read_config_file(path: Path = CONFIG_PATH) -> Dict[str, Optional[str]]:
         "token": str(token) if token is not None else None,
         "default_channel": str(default_channel) if default_channel is not None else None,
     }
+
+
+def _write_config_file(config: Dict[str, Optional[str]], path: Path = CONFIG_PATH) -> None:
+    """Persist configuration to disk, preserving existing values when present."""
+
+    path.parent.mkdir(parents=True, exist_ok=True)
+
+    # Manually emit TOML since we only need a tiny subset and avoid extra deps.
+    lines = []
+    for key in ("base_url", "token", "default_channel"):
+        value = config.get(key)
+        if value is None:
+            continue
+        escaped = str(value).replace("\\", "\\\\").replace('"', '\\\"')
+        lines.append(f'{key} = "{escaped}"')
+
+    content = "\n".join(lines) + ("\n" if lines else "")
+    path.write_text(content, encoding="utf-8")
 
 
 @dataclass
@@ -90,3 +108,15 @@ def load_settings(
         output_json=output_json,
         quiet=quiet,
     )
+
+
+def save_base_url(base_url: str, path: Path = CONFIG_PATH) -> Path:
+    """Update (or create) the config file with the provided base URL."""
+
+    sanitized_url = base_url.rstrip("/")
+    if not sanitized_url:
+        raise ValueError("base_url cannot be empty")
+    config = _read_config_file(path)
+    config["base_url"] = sanitized_url
+    _write_config_file(config, path)
+    return path

@@ -5,6 +5,7 @@ from rich.console import Console
 
 from openrsvp_cli.channels import channels_app
 from openrsvp_cli.config import Settings, load_settings
+from openrsvp_cli.config_cli import config_app
 from openrsvp_cli.events import events_app
 from openrsvp_cli.rsvps import rsvps_app
 
@@ -60,6 +61,7 @@ def main(  # type: ignore[override]
 app.add_typer(events_app, name="events")
 app.add_typer(rsvps_app, name="rsvps")
 app.add_typer(channels_app, name="channels")
+app.add_typer(config_app, name="config")
 
 
 if __name__ == "__main__":
